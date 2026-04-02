@@ -14,7 +14,7 @@ app.get('/api/cars', (req, res) => {
     try {
         res.status(200).json({
             status: 200,
-            cars: cars
+            data: cars
         })
     } catch {
         res.status(500).json({
@@ -31,11 +31,12 @@ app.get('/api/cars/:id', (req, res) => {
         if (car) {
             res.status(200).json({
                 status: 200,
-                cars: [car]
+                data: car
             })
+            return;
         }
-        res.status(400).json({
-            status: 400,
+        res.status(404).json({
+            status: 404,
             error: 'მანქანა ამ ID-ით ვერ მოიძებნა'
         })
     } catch {
@@ -67,8 +68,9 @@ app.post('/api/cars', (req, res) => {
             cars.push(car);
             res.status(201).json({
                 status: 201,
-                cars: [car]
+                data: car
             })
+            return;
         }
         res.status(400).json({
             status: 400,
@@ -102,8 +104,9 @@ app.put('/api/cars/:id', (req, res) => {
 
             res.status(200).json({
                 status: 200,
-                cars: [car]
+                data: car
             })
+            return;
         }
         res.status(404).json({
             status: 404,
@@ -128,6 +131,7 @@ app.delete('/api/cars/:id', (req, res) => {
                 status: 200,
                 message: 'მანქანა წარმატებით გაიყიდა (წაიშალა ბაზიდან)'
             })
+            return;
         }
         res.status(404).json({
             status: 404,
