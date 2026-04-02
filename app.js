@@ -10,7 +10,7 @@ let cars = [
 
 app.use(express.json());
 
-app.get('/api/cars', (req, res) => {
+app.get('/api/cars', async (req, res) => {
     try {
         res.status(200).json({
             status: 200,
@@ -24,7 +24,7 @@ app.get('/api/cars', (req, res) => {
     }
 })
 
-app.get('/api/cars/:id', (req, res) => {
+app.get('/api/cars/:id', async (req, res) => {
     try {
         let id = +req.params.id;
         let car = cars.find(c => c.id === id);
@@ -47,7 +47,7 @@ app.get('/api/cars/:id', (req, res) => {
     }
 })
 
-app.post('/api/cars', (req, res) => {
+app.post('/api/cars', async (req, res) => {
     try {
         let brand = req.body.brand;
         let model = req.body.model;
@@ -55,14 +55,14 @@ app.post('/api/cars', (req, res) => {
         let price = +req.body.price;
         let color = req.body.color;
 
-        if (brand && model) {
+        if (brand && model && !isNaN(year) && !isNaN(price) && color) {
             let car = {
                 id: Date.now(),
                 brand: brand,
                 model: model,
-                year: year || 0,
-                price: price || 0,
-                color: color || 'unknown'
+                year: year,
+                price: price,
+                color: color
             }
 
             cars.push(car);
@@ -74,7 +74,7 @@ app.post('/api/cars', (req, res) => {
         }
         res.status(400).json({
             status: 400,
-            error: 'ბრენდი და მოდელი სავალდებულოა!'
+            error: 'ყველა დეტალი სავალდებულოა!'
         })
     } catch {
         res.status(500).json({
@@ -84,7 +84,7 @@ app.post('/api/cars', (req, res) => {
     }
 })
 
-app.put('/api/cars/:id', (req, res) => {
+app.put('/api/cars/:id', async (req, res) => {
     try {
         let id = +req.params.id;
         let car = cars.find(c => c.id === id);
@@ -120,7 +120,7 @@ app.put('/api/cars/:id', (req, res) => {
     }
 })
 
-app.delete('/api/cars/:id', (req, res) => {
+app.delete('/api/cars/:id', async (req, res) => {
     try {
         let id = +req.params.id;
         let car = cars.find(c => c.id === id);
